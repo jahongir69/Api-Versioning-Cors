@@ -11,3 +11,13 @@ Route::prefix('v1')->group(function () {
 Route::prefix('v2')->group(function () {
     Route::get('/users', [UserV2::class, 'index']);
 });
+
+Route::get('/users', function (\Illuminate\Http\Request $request) {
+    $version = $request->query('version', '1'); 
+
+    if ($version == '2') {
+        return app(UserV2::class)->index();
+    }
+    
+    return app(UserV1::class)->index();
+});
